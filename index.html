@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>69LPGGas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://files.catbox.moe/l5a13b.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body.light-theme {
+            background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), url('https://files.catbox.moe/l5a13b.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+        }
+
+        /* Screen Management */
+        .screen {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Login Screen */
+        #login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(rgba(139, 0, 0, 0.8), rgba(178, 34, 34, 0.8)), url('https://files.catbox.moe/l5a13b.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .login-container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .user-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 1.5rem;
+            border: 2px solid #fff;
+        }
+
+        .login-btn {
+            background: #8B0000;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 1rem;
+        }
+
+        .login-btn:hover {
+            background: #FF0000;
+            transform: scale(1.05);
+        }
+
+        .slogan {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(139, 0, 0, 0.9);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-brand img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 0, 0, 0.7);
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .cart-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-container i {
+            font-size: 1.5rem;
+        }
+
+        #cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #FF0000;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .buy-btn {
+            background: #32CD32;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .buy-btn:hover {
+            background: #228B22;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100vh;
+            background: rgba(139, 0, 0, 0.95);
+            padding: 2rem;
+            z-index: 1000;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .sidebar.active {
+            right: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        #close-sidebar {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .developer-info {
+            margin-bottom: 2rem;
+        }
+
+        .dev-btn {
+            display: block;
+            background: #4B0082;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .dev-btn:hover {
+            background: #6A0DAD;
+        }
+
+        /* Page Container */
+        .page-container {
+            padding: 2rem;
+            min-height: calc(100vh - 180px);
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Home Page */
+        #home-page {
+            text-align: center;
+            padding-top: 2rem;
+        }
+
+        #home-page h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #FFD700;
+        }
+
+        .whatsapp-group-btn {
+            display: inline-block;
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            margin: 2rem 0;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-group-btn:hover {
+            background: #128C7E;
+            transform: scale(1.05);
+        }
+
+        .floating-whatsapp {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.8rem;
+            box-shadow: 0 0 15px rgba(37, 211, 102, 0.7);
+            animation: pulse 2s infinite;
+            z-index: 99;
+            text-decoration: none;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+
+        /* Prices Page */
+        .prices-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .price-item {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .light-theme .price-item {
+            background: rgba(255, 255, 255, 0.8);
+            color: #333;
+        }
+
+        .price-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .price-item h3 {
+            color: #FFD700;
+            margin-bottom: 1rem;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #32CD32;
+        }
+
+        .promotion {
+            position: relative;
+            border: 2px solid #FFD700;
+        }
+
+        .promo-label {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background: #FFD700;
+            color: #8B0000;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .time-unit {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            min-width: 70px;
+        }
+
+        .light-theme .time-unit {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+
+        .time-unit span {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #FF0000;
+        }
+
+        .time-unit small {
+            display: block;
+            font-size: 0.8rem;
+            color: #CCC;
+        }
+
+        .light-theme .time-unit small {
+            color: #666;
+        }
+
+        /* Products Page */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .light-theme .product-card {
+            background: rgba(255, 255, 255, 0.8);
+            color: #333;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #FFD700;
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #32CD32;
+            margin-bottom: 1rem;
+        }
+
+        .product-description {
+            margin-bottom: 1.5rem;
+            color: #CCC;
+            line-height: 1.5;
+        }
+
+        .light-theme .product-description {
+            color: #666;
+        }
+
+        .add-to-cart {
+            background: #8B0000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: #FF0000;
+        }
+
+        /* Cautions Page */
+        .cautions-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .caution-item {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .light-theme .caution-item {
+            background: rgba(255, 255, 255, 0.8);
+            color: #333;
+        }
+
+        .caution-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .caution-item i {
+            font-size: 2.5rem;
+            color: #FFA500;
+            margin-bottom: 1rem;
+        }
+
+        .caution-item h3 {
+            margin-bottom: 1rem;
+            color: #FFD700;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .light-theme .footer {
+            background: rgba(139, 0, 0, 0.9);
+            color: white;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            color: #FFD700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p, .footer-section a {
+            margin-bottom: 0.5rem;
+            display: block;
+            color: #CCC;
+            text-decoration: none;
+        }
+
+        .light-theme .footer-section p, 
+        .light-theme .footer-section a {
+            color: #EEE;
+        }
+
+        .footer-section a:hover {
+            color: #FFD700;
+        }
+
+        .footer-section i {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            .prices-container, .products-grid, .cautions-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .countdown {
+                flex-wrap: wrap;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+        <div class="login-container">
+            <img src="https://files.catbox.moe/l5a13b.png" alt="User Icon" class="user-icon">
+            <button id="guest-login" class="login-btn">Login As Guest</button>
+            <p class="slogan">Gas Rinogara</p>
+        </div>
+    </div>
+
+    <!-- Main Content (hidden until login) -->
+    <div id="main-content" class="screen">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <img src="https://files.catbox.moe/l5a13b.png" alt="Logo">
+                <span>69LPGGas</span>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="nav-link active" data-page="home">HOME</a>
+                <a href="#" class="nav-link" data-page="prices">PRICES</a>
+                <a href="#" class="nav-link" data-page="products">PRODUCTS</a>
+                <a href="#" class="nav-link" data-page="cautions">CAUTIONS</a>
+            </div>
+            <div class="nav-controls">
+                <div class="cart-container">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count">0</span>
+                </div>
+                <button id="buy-now" class="buy-btn">Buy Now</button>
+                <div class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-sun"></i>
+                </div>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Sidebar Menu -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Logged In As Guest</h3>
+                <button id="close-sidebar">&times;</button>
+            </div>
+            <div class="developer-info">
+                <p>Hi 👋 I'm a Zimbabwean Developer, Feel free to reach out to my Business WhatsApp for any Technical issues</p>
+                <a href="https://wa.me/27642701608" class="dev-btn" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Contact Developer
+                </a>
+                <a href="https://ko-fi.com/16ixtxxn" class="dev-btn" target="_blank">
+                    <i class="fas fa-coffee"></i> Buy me coffee ☕️
+                </a>
+            </div>
+        </div>
+
+        <!-- Pages -->
+        <div class="page-container">
+            <!-- Home Page -->
+            <div id="home-page" class="page active">
+                <h1>Welcome to 69LPGGas</h1>
+                <p>Your trusted provider of quality gas products and accessories</p>
+                <a href="https://chat.whatsapp.com/C93bc3e0Eqi0yVdJAkgxM9" class="whatsapp-group-btn" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Join our WhatsApp Group
+                </a>
+                <a href="https://wa.me/263780074647" class="floating-whatsapp" id="floating-whatsapp">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+            </div>
+
+            <!-- Prices Page -->
+            <div id="prices-page" class="page">
+                <h1>Our Prices</h1>
+                <div class="prices-container">
+                    <div class="price-item">
+                        <h3>Standard Gas</h3>
+                        <p class="price">$1.7/kg or R35</p>
+                    </div>
+                    <div class="price-item promotion">
+                        <div class="promo-label">🏷 Promotion</div>
+                        <h3>Dira Rizare Promotion</h3>
+                        <p class="price">3kg for R105</p>
+                        <div class="countdown" id="countdown">
+                            <div class="time-unit">
+                                <span id="days">00</span>
+                                <small>Days</small>
+                            </div>
+                            <div class="time-unit">
+                                <span id="hours">00</span>
+                                <small>Hours</small>
+                            </div>
+                            <div class="time-unit">
+                                <span id="minutes">00</span>
+                                <small>Minutes</small>
+                            </div>
+                            <div class="time-unit">
+                                <span id="seconds">00</span>
+                                <small>Seconds</small>
+                            </div>
+                            <div class="time-unit">
+                                <span id="milliseconds">000</span>
+                                <small>Milliseconds</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="price-item">
+                        <h3>5kg Gas</h3>
+                        <p class="price">$8.5 or R175</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Page -->
+            <div id="products-page" class="page">
+                <h1>Our Products</h1>
+                <div class="products-grid" id="products-grid">
+                    <!-- Products will be loaded dynamically -->
+                </div>
+            </div>
+
+            <!-- Cautions Page -->
+            <div id="cautions-page" class="page">
+                <h1>Safety Cautions ⚠️</h1>
+                <div class="cautions-list">
+                    <div class="caution-item">
+                        <i class="fas fa-fire"></i>
+                        <h3>Keep Away From Flames</h3>
+                        <p>Always keep gas containers away from open flames and heat sources.</p>
+                    </div>
+                    <div class="caution-item">
+                        <i class="fas fa-home"></i>
+                        <h3>Use in Well-Ventilated Areas</h3>
+                        <p>Only use gas appliances in well-ventilated spaces to prevent gas buildup.</p>
+                    </div>
+                    <div class="caution-item">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>Regular Inspection</h3>
+                        <p>Regularly check hoses and connections for wear or damage.</p>
+                    </div>
+                    <div class="caution-item">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Leak Detection</h3>
+                        <p>If you smell gas, turn off the supply, extinguish flames, and ventilate the area immediately.</p>
+                    </div>
+                    <div class="caution-item">
+                        <i class="fas fa-store-alt"></i>
+                        <h3>Proper Storage</h3>
+                        <p>Store gas cylinders upright in a cool, dry place away from direct sunlight.</p>
+                    </div>
+                    <div class="caution-item">
+                        <i class="fas fa-ban"></i>
+                        <h3>No DIY Repairs</h3>
+                        <p>Never attempt to repair gas equipment yourself - always use a qualified technician.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> 69LPGGas@gmail.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 165 Shongamiti, Ngundu, Masvingo, Zimbabwe</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="#" data-page="home">Home</a>
+                    <a href="#" data-page="prices">Prices</a>
+                    <a href="#" data-page="products">Products</a>
+                    <a href="#" data-page="cautions">Safety Information</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <a href="https://wa.me/263780074647" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                    <a href="https://chat.whatsapp.com/C93bc3e0Eqi0yVdJAkgxM9" target="_blank"><i class="fab fa-whatsapp"></i> Join Our Group</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 69LPGGas. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Product data
+            const products = [
+                {
+                    id: 1,
+                    name: "Steel Gas Stove",
+                    price: 25,
+                    image: "https://files.catbox.moe/jcujvc.png",
+                    description: "Durable steel gas stove with high efficiency burners. Perfect for home cooking with easy-to-clean surface."
+                },
+                {
+                    id: 2,
+                    name: "CADAC Gas Stove with pipe",
+                    price: 23,
+                    image: "https://files.catbox.moe/4ge45b.png",
+                    description: "Premium CADAC gas stove with included safety pipe. Portable design ideal for outdoor activities and camping."
+                },
+                {
+                    id: 3,
+                    name: "Afrox Gas Stove",
+                    price: 20,
+                    image: "https://files.catbox.moe/mf1784.jpg",
+                    description: "Reliable Afrox gas stove with sturdy construction. Features flame failure device for added safety."
+                },
+                {
+                    id: 4,
+                    name: "9kg Gas Tank Empty",
+                    price: 31.5,
+                    image: "https://files.catbox.moe/irszqf.png",
+                    description: "Empty 9kg gas tank, certified and tested for safety. Perfect for refill and long-term use."
+                },
+                {
+                    id: 5,
+                    name: "11kg Gas Tank Empty",
+                    price: 42,
+                    image: "https://files.catbox.moe/d1xv59.jpg",
+                    description: "Empty 11kg gas tank with high-quality valve. Durable construction designed for multiple refills."
+                }
+            ];
+
+            // DOM Elements
+            const loginScreen = document.getElementById('login-screen');
+            const mainContent = document.getElementById('main-content');
+            const guestLoginBtn = document.getElementById('guest-login');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page');
+            const hamburger = document.getElementById('hamburger');
+            const sidebar = document.getElementById('sidebar');
+            const closeSidebar = document.getElementById('close-sidebar');
+            const themeToggle = document.getElementById('theme-toggle');
+            const cartCount = document.getElementById('cart-count');
+            const buyNowBtn = document.getElementById('buy-now');
+            const productsGrid = document.getElementById('products-grid');
+            const floatingWhatsapp = document.getElementById('floating-whatsapp');
+            
+            // Cart items array
+            let cartItems = [];
+            
+            // Initialize the page
+            function init() {
+                // Display products
+                displayProducts();
+                
+                // Set up countdown timer
+                initializeCountdown();
+                
+                // Set up event listeners
+                setupEventListeners();
+            }
+            
+            // Set up event listeners
+            function setupEventListeners() {
+                // Guest login
+                guestLoginBtn.addEventListener('click', function() {
+                    loginScreen.classList.remove('active');
+                    mainContent.classList.add('active');
+                });
+                
+                // Navigation
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const pageId = this.getAttribute('data-page') + '-page';
+                        
+                        // Update active nav link
+                        navLinks.forEach(nav => nav.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        // Show the corresponding page
+                        pages.forEach(page => page.classList.remove('active'));
+                        document.getElementById(pageId).classList.add('active');
+                    });
+                });
+                
+                // Sidebar toggle
+                hamburger.addEventListener('click', function() {
+                    sidebar.classList.add('active');
+                });
+                
+                closeSidebar.addEventListener('click', function() {
+                    sidebar.classList.remove('active');
+                });
+                
+                // Theme toggle
+                themeToggle.addEventListener('click', function() {
+                    document.body.classList.toggle('light-theme');
+                    const icon = themeToggle.querySelector('i');
+                    if (document.body.classList.contains('light-theme')) {
+                        icon.classList.remove('fa-sun');
+                        icon.classList.add('fa-moon');
+                    } else {
+                        icon.classList.remove('fa-moon');
+                        icon.classList.add('fa-sun');
+                    }
+                });
+                
+                // Buy Now button
+                buyNowBtn.addEventListener('click', function() {
+                    if (cartItems.length === 0) {
+                        alert('Your cart is empty. Please add some products first.');
+                        return;
+                    }
+                    
+                    let message = "I'd like to buy these items:\n";
+                    let total = 0;
+                    
+                    cartItems.forEach(item => {
+                        message += `- ${item.name} ($${item.price})\n`;
+                        total += item.price;
+                    });
+                    
+                    message += `\nTotal: $${total.toFixed(2)}\n\nWhere do I make the payment?`;
+                    
+                    const encodedMessage = encodeURIComponent(message);
+                    window.open(`https://wa.me/263782404426?text=${encodedMessage}`, '_blank');
+                });
+                
+                // Floating WhatsApp button
+                floatingWhatsapp.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.open('https://wa.me/263780074647', '_blank');
+                });
+            }
+            
+            // Display products in the grid
+            function displayProducts() {
+                productsGrid.innerHTML = '';
+                
+                products.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    
+                    productCard.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}" class="product-image">
+                        <div class="product-info">
+                            <h3 class="product-title">${product.name}</h3>
+                            <p class="product-price">$${product.price}</p>
+                            <p class="product-description">${product.description}</p>
+                            <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
+                        </div>
+                    `;
+                    
+                    productsGrid.appendChild(productCard);
+                    
+                    // Add event listener to the Add to Cart button
+                    const addToCartBtn = productCard.querySelector('.add-to-cart');
+                    addToCartBtn.addEventListener('click', function() {
+                        addToCart(product);
+                    });
+                });
+            }
+            
+            // Add product to cart
+            function addToCart(product) {
+                cartItems.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price
+                });
+                
+                updateCartCount();
+                
+                // Show confirmation
+                const confirmation = document.createElement('div');
+                confirmation.textContent = `${product.name} added to cart!`;
+                confirmation.style.position = 'fixed';
+                confirmation.style.bottom = '20px';
+                confirmation.style.left = '50%';
+                confirmation.style.transform = 'translateX(-50%)';
+                confirmation.style.backgroundColor = '#32CD32';
+                confirmation.style.color = 'white';
+                confirmation.style.padding = '10px 20px';
+                confirmation.style.borderRadius = '5px';
+                confirmation.style.zIndex = '1000';
+                confirmation.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+                
+                document.body.appendChild(confirmation);
+                
+                // Remove confirmation after 2 seconds
+                setTimeout(() => {
+                    confirmation.style.opacity = '0';
+                    confirmation.style.transition = 'opacity 0.5s';
+                    setTimeout(() => {
+                        document.body.removeChild(confirmation);
+                    }, 500);
+                }, 2000);
+            }
+            
+            // Update cart count
+            function updateCartCount() {
+                cartCount.textContent = cartItems.length;
+            }
+            
+            // Initialize countdown timer
+            function initializeCountdown() {
+                // Set the date we're counting down to (10 days from now)
+                const countDownDate = new Date();
+                countDownDate.setDate(countDownDate.getDate() + 10);
+                
+                // Update the countdown every millisecond
+                const countdownFunction = setInterval(function() {
+                    // Get current date and time
+                    const now = new Date().getTime();
+                    
+                    // Find the distance between now and the countdown date
+                    const distance = countDownDate - now;
+                    
+                    // Time calculations for days, hours, minutes, seconds, and milliseconds
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    const milliseconds = Math.floor(distance % 1000);
+                    
+                    // Display the results
+                    document.getElementById("days").textContent = days.toString().padStart(2, '0');
+                    document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+                    document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+                    document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
+                    document.getElementById("milliseconds").textContent = milliseconds.toString().padStart(3, '0');
+                    
+                    // If the countdown is over, write some text
+                    if (distance < 0) {
+                        clearInterval(countdownFunction);
+                        document.getElementById("countdown").innerHTML = "EXPIRED";
+                    }
+                }, 1);
+            }
+            
+            // Initialize the application
+            init();
+        });
+    </script>
+</body>
+  </html>
